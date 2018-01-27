@@ -6,7 +6,7 @@
 /*   By: kmckee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 19:15:56 by kmckee            #+#    #+#             */
-/*   Updated: 2018/01/25 11:04:29 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/01/26 16:06:47 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	create_structs(t_master *master)
 	master->map = map;
 	master->rays = rays;
 	master->mini = mini;
+	jump_table(master);
 }
 
 void	start_game(t_master *master, int height)

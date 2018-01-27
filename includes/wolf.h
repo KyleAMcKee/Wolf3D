@@ -6,7 +6,7 @@
 /*   By: kmckee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 19:14:41 by kmckee            #+#    #+#             */
-/*   Updated: 2018/01/24 14:21:57 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/01/26 16:47:46 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ typedef struct	s_master
 	t_mini	*mini;
 	t_cam	*cam;
 	t_map	*map;
-	t_rays	*rays;	
+	t_rays	*rays;
+	void	(*table[128])(struct s_master *);
 }				t_master;
 
 /*
@@ -116,6 +117,7 @@ void	draw_walls(t_master *master, int x, int side);
 */
 
 void	init_hooks(t_master *master);
+void	jump_table(t_master *master);
 
 /*
 ** -----MINI MAP-----

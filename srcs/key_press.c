@@ -6,7 +6,7 @@
 /*   By: kmckee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:48:13 by kmckee            #+#    #+#             */
-/*   Updated: 2018/01/25 11:08:02 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/01/26 16:50:21 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 int		key_press(int keycode, t_master *master)
 {
-
+	printf("%i\n", keycode);
+	master->table[keycode](master);
 	if (keycode == ESC)
 		exit(0);
-	if (keycode == W)
-	{
+	return (0);
+}
+
+void	key_w(t_master *master)
+{
 		if (master->map->map[(int)master->rays->x_pos +
 				 (int)master->rays->x_dir][(int)master->rays->y_pos] == 0)
 			master->rays->x_pos += master->rays->x_dir;
@@ -28,9 +32,10 @@ int		key_press(int keycode, t_master *master)
 		mlx_clear_window(master->cam->mlx, master->cam->win);
 		raycast(master);
 		drawminimap(master);
-	}
-	if (keycode == A)
-	{
+}
+
+void	key_a(t_master *master)
+{
 		double	old_x_dir;
 		double	old_x_plane;
 		double c;
@@ -49,19 +54,21 @@ int		key_press(int keycode, t_master *master)
 		master->cam->y_plane = (old_x_plane * s) + (master->cam->y_plane * c);
 		raycast(master);
 		drawminimap(master);
-	}
-	if (keycode == S)
-	{
-		if (master->map->map[(int)master->rays->x_pos - (int)master->rays->x_dir][(int)master->rays->y_pos] == 0)
-			master->rays->x_pos -= (int)master->rays->x_dir;
-		if (master->map->map[(int)master->rays->x_pos][(int)master->rays->y_pos - (int)master->rays->y_dir] == 0) 
-			master->rays->y_pos -= (int)master->rays->y_dir;
-		mlx_clear_window(master->cam->mlx, master->cam->win);
-		raycast(master);
-		drawminimap(master);
-	}
-	if (keycode == D)
-	{
+}
+
+void	key_s(t_master *master)
+{
+	if (master->map->map[(int)master->rays->x_pos - (int)master->rays->x_dir][(int)master->rays->y_pos] == 0)
+		master->rays->x_pos -= (int)master->rays->x_dir;
+	if (master->map->map[(int)master->rays->x_pos][(int)master->rays->y_pos - (int)master->rays->y_dir] == 0) 
+		master->rays->y_pos -= (int)master->rays->y_dir;
+	mlx_clear_window(master->cam->mlx, master->cam->win);
+	raycast(master);
+	drawminimap(master);
+}
+
+void	key_d(t_master *master)
+{
 		double	old_x_dir;
 		double	old_x_plane;
 		double c;
@@ -80,8 +87,15 @@ int		key_press(int keycode, t_master *master)
 		master->cam->y_plane = (old_x_plane * s) + (master->cam->y_plane * c);
 	  	raycast(master);
 		drawminimap(master);
-    }
-	return (0);
+}
+
+void	jump_table(t_master *master)
+{
+	ft_memset(master->table, 0, sizeof(master->table));
+	master->table[W] = &key_w;
+	master->table[A] = &key_a;
+	master->table[S] = &key_s;
+	master->table[D] = &key_d;
 }
 
 void	init_hooks(t_master *master)
