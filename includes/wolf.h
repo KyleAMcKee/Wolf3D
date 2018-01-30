@@ -6,7 +6,7 @@
 /*   By: kmckee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 19:14:41 by kmckee            #+#    #+#             */
-/*   Updated: 2018/01/26 16:47:46 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/01/29 17:26:58 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,27 @@
 # define S 1
 # define D 2
 # define W 13
+# define UP 126
+# define LEFT 123
+# define DOWN 125
+# define RIGHT 124
 # define ESC 53
+
+/*
+** -----EASE OF USE
+*/
+
+# define MAP master->map
+# define CAM master->cam
+# define MINI master->mini
+# define RAYS master->rays
+# define MOUSE master->mouse
+
+typedef struct	s_mouse
+{
+	int		x;
+	int		y;
+}				t_mouse;
 
 typedef struct	s_mini
 {
@@ -78,10 +98,6 @@ typedef struct	s_rays
 	double	perp_wall_dist;
 	int		x_step;
 	int		y_step;
-	//int		hit;
-	//int		side;
-	//int		x_map;
-	//int		y_map;
 	int		line_height;
 	int		draw_start;
 	int		draw_end;
@@ -93,6 +109,7 @@ typedef struct	s_master
 	t_cam	*cam;
 	t_map	*map;
 	t_rays	*rays;
+	t_mouse	*mouse;
 	void	(*table[128])(struct s_master *);
 }				t_master;
 
@@ -118,6 +135,12 @@ void	draw_walls(t_master *master, int x, int side);
 
 void	init_hooks(t_master *master);
 void	jump_table(t_master *master);
+void	key_w(t_master *master);
+void	key_a(t_master *master);
+void	key_s(t_master *master);
+void	key_d(t_master *master);
+int		key_press(int keycode, t_master *master);
+int		mouse(int x, int y, t_master *master);
 
 /*
 ** -----MINI MAP-----
@@ -131,5 +154,11 @@ void	drawsquare(t_master *master, int index, int color);
 */
 
 int	incorrect_args(int error_num);
+
+/*
+**  -----PRINTING-----
+*/
+
+void	print_status(t_master *master);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kmckee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 14:49:59 by kmckee            #+#    #+#             */
-/*   Updated: 2018/01/25 11:18:51 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/01/29 16:38:06 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,52 +14,51 @@
 
 void	set_constants(t_master *master)
 {	
-	master->rays->x_pos = 8; // How to
-	master->rays->y_pos = 3; // Determine these?
-	master->rays->x_dir = -1;
-	master->rays->y_dir = 0;
-	master->cam->x_plane = 0;
-	master->cam->y_plane = 0.66;
-	master->mini->width = master->map->width * 10;
-	master->mini->height = master->map->height * 10;
-	master->cam->mlx = mlx_init();
-	master->mini->win = mlx_new_window(master->cam->mlx, master->mini->width, master->mini->height, "Mini Map");
-	master->cam->win = mlx_new_window(master->cam->mlx, HEIGHT, WIDTH, "Raycaster");
+	RAYS->x_pos = 8; // How to
+	RAYS->y_pos = 3; // Determine these?
+	RAYS->x_dir = -1;
+	RAYS->y_dir = 0;
+	CAM->x_plane = 0;
+	CAM->y_plane = 0.66;
+	MINI->width = MAP->width * 10;
+	MINI->height = MAP->height * 10;
+	CAM->mlx = mlx_init();
+	MINI->win = mlx_new_window(CAM->mlx, MINI->width, MINI->height, "Mini Map");
+	CAM->win = mlx_new_window(CAM->mlx, HEIGHT, WIDTH, "Raycaster");
 }
 
 void	set_vars(t_master *master, int x)
 {
-	master->map->x_map = (int)master->rays->x_pos;
-	master->map->y_map = (int)master->rays->y_pos;
-	master->cam->x_camera = (2 * x / (double)WIDTH) - 1;
-	master->rays->x_ray_dir = master->rays->x_dir + master->cam->x_plane * master->cam->x_camera; 
-	master->rays->y_ray_dir = master->rays->y_dir + master->cam->y_plane * master->cam->x_camera;
-	master->rays->delta_x = fabs(1 / master->rays->x_ray_dir);	
-	master->rays->delta_y = fabs(1 / master->rays->y_ray_dir);
+	MAP->x_map = (int)RAYS->x_pos;
+	MAP->y_map = (int)RAYS->y_pos;
+	CAM->x_camera = (2 * x / (double)WIDTH) - 1;
+	RAYS->x_ray_dir = RAYS->x_dir + CAM->x_plane * CAM->x_camera; 
+	RAYS->y_ray_dir = RAYS->y_dir + CAM->y_plane * CAM->x_camera;
+	RAYS->delta_x = fabs(1 / RAYS->x_ray_dir);	
+	RAYS->delta_y = fabs(1 / RAYS->y_ray_dir);
 }
 
 void	set_dir(t_master *master)
 {
-	if (master->rays->x_ray_dir < 0)
+	if (RAYS->x_ray_dir < 0)
 	{
-		master->rays->x_step = -1;
-		master->rays->x_side_dist = (master->rays->x_pos - master->map->x_map) * master->rays->delta_x;
+		RAYS->x_step = -1;
+		RAYS->x_side_dist = (RAYS->x_pos - MAP->x_map) * RAYS->delta_x;
 	}
 	else
 	{
-		master->rays->x_step = 1;
-		master->rays->x_side_dist = (master->map->x_map + 1.0 - master->rays->x_pos) * master->rays->delta_x;
+		RAYS->x_step = 1;
+		RAYS->x_side_dist = (MAP->x_map + 1.0 - RAYS->x_pos) * RAYS->delta_x;
 	}
-	//master->rays->x_ray_dir < 0 ? master->rays->x_step = -1 : master->rays->x_step = 1;
-	if (master->rays->y_ray_dir < 0)
+	if (RAYS->y_ray_dir < 0)
 	{
-		master->rays->y_step = -1;
-		master->rays->y_side_dist = (master->rays->y_pos - master->map->y_map) * master->rays->delta_y;
+		RAYS->y_step = -1;
+		RAYS->y_side_dist = (RAYS->y_pos - MAP->y_map) * RAYS->delta_y;
 	}	
 	else
 	{
-		master->rays->y_step = 1;
-		master->rays->y_side_dist = (master->map->y_map + 1.0 - master->rays->y_pos) * master->rays->delta_y;
+		RAYS->y_step = 1;
+		RAYS->y_side_dist = (MAP->y_map + 1.0 - RAYS->y_pos) * RAYS->delta_y;
 	}
 }
 
@@ -78,27 +77,29 @@ void	raycast(t_master *master)
 		set_dir(master);
 		while (hit == 0)
 		{
-			if (master->rays->x_side_dist < master->rays->y_side_dist)
+			if (RAYS->x_side_dist < RAYS->y_side_dist)
 			{
-				master->rays->x_side_dist += master->rays->delta_x;
-				master->map->x_map += master->rays->x_step;
+				RAYS->x_side_dist += RAYS->delta_x;
+				MAP->x_map += RAYS->x_step;
 				side = 0;
 			}
 			else
 			{
-				master->rays->y_side_dist += master->rays->delta_y;
-				master->map->y_map += master->rays->y_step;
+				RAYS->y_side_dist += RAYS->delta_y;
+				MAP->y_map += RAYS->y_step;
 				side = 1;
 			}
-			if (master->map->map[master->map->x_map][master->map->y_map] > 0)
+			if (MAP->map[MAP->x_map][MAP->y_map] > 0)
 				hit = 1;	
 		}
 		if (side == 0)
-			master->rays->perp_wall_dist = (master->map->x_map - master->rays->x_pos + (1 - master->rays->x_step) / 2) / master->rays->x_ray_dir;
+			RAYS->perp_wall_dist = (MAP->x_map - RAYS->x_pos + (1 - RAYS->x_step) / 2) / RAYS->x_ray_dir;
 		else
-			master->rays->perp_wall_dist = (master->map->y_map - master->rays->y_pos + (1 - master->rays->y_step) / 2) / master->rays->y_ray_dir;
-		master->rays->line_height = (int)(HEIGHT / master->rays->perp_wall_dist);
+			RAYS->perp_wall_dist = (MAP->y_map - RAYS->y_pos + (1 - RAYS->y_step) / 2) / RAYS->y_ray_dir;
+		RAYS->line_height = (int)(HEIGHT / RAYS->perp_wall_dist);
 		draw_walls(master, x, side);
 	}
+	MAP->x_map = (int)RAYS->x_pos;
+	MAP->y_map = (int)RAYS->y_pos;
 	destroy_walls(master);
 }

@@ -6,7 +6,7 @@
 /*   By: kmckee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 19:15:56 by kmckee            #+#    #+#             */
-/*   Updated: 2018/01/26 16:06:47 by kmckee           ###   ########.fr       */
+/*   Updated: 2018/01/29 17:15:37 by kmckee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,18 @@ void	create_structs(t_master *master)
 	t_cam	*cam;
 	t_rays	*rays;
 	t_mini	*mini;
+	t_mouse	*mouse;
 
 	map = (t_map*)malloc(sizeof(t_map));
 	cam = (t_cam*)malloc(sizeof(t_cam));
 	rays = (t_rays*)malloc(sizeof(t_rays));
 	mini = (t_mini*)malloc(sizeof(t_mini));
+	mouse = (t_mouse*)malloc(sizeof(t_mouse));
 	master->cam = cam;
 	master->map = map;
 	master->rays = rays;
 	master->mini = mini;
+	master->mouse = mouse;
 	jump_table(master);
 }
 
@@ -36,8 +39,6 @@ void	start_game(t_master *master, int height)
 	master->map->height = height;
 	set_constants(master);
 	raycast(master);
-	master->mini->win = mlx_new_window(master->cam->mlx,
-			master->mini->width, master->mini->height, "Mini Map");
 	drawminimap(master);
 	init_hooks(master);
 	mlx_loop(master->cam->mlx);
