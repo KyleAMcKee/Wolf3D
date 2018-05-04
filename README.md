@@ -1,4 +1,4 @@
-# 42 Project: FDF
+# 42 Project: Wold 3d
 
 This program was made to recreate the look and feel of the classic 90s game, Wolfenstein 3D. 42's basic MLX library was used for the graphics and textures are borrowed from the orginal game.
 
@@ -29,9 +29,9 @@ To execute the program:
 
 Try running the following:
 
-`./fdf maps/mars.fdf`
+`./wolf maps/large.fdf`
 
-`./fdf maps/42.fdf`
+`./wolf maps/huge.fdf`
 
 ## Screenshots
 
