@@ -6,7 +6,7 @@
 #    By: kmckee <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/08 10:55:28 by kmckee            #+#    #+#              #
-#    Updated: 2018/01/29 17:20:10 by kmckee           ###   ########.fr        #
+#    Updated: 2018/02/03 11:32:24 by kmckee           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -18,9 +18,10 @@ LIBFT		=	libft/
 CC			=	gcc
 FLAGS		=	-Wall -Werror -Wextra -g
 
-SOURCES		=	main.c error.c draw.c raycast.c key_press.c \
+SOURCES		=	main.c text_output.c raycast.c key_press.c \
 				minimap.c key_movement.c mouse_movement.c \
-				print_status.c
+				textures.c shader.c draw_walls.c draw_floor.c \
+				read_map.c print_status.c\
 
 SRCS		=	$(addprefix $(SRCDIR), $(SOURCES))
 OBJS		=	$(addprefix $(OBJDIR), $(SOURCES:.c=.o))
